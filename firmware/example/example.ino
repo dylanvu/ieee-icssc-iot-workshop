@@ -42,7 +42,8 @@ const char* ca = \
 */
 
 void setup() {
-
+  
+    // set the baud rate
     USE_SERIAL.begin(115200);
 
     USE_SERIAL.println();
@@ -55,7 +56,7 @@ void setup() {
         delay(1000);
     }
 
-    wifiMulti.addAP("SSID", "PASSWORD");
+    wifiMulti.addAP("Dylan-iPhone", "Goanteaters!");
 
 }
 
@@ -66,14 +67,15 @@ void loop() {
         HTTPClient http;
 
         USE_SERIAL.print("[HTTP] begin...\n");
+
+        // make the GET request first
         // configure traged server and url
-        //http.begin("https://www.howsmyssl.com/a/check", ca); //HTTPS
-        http.begin("http://example.com/index.html"); //HTTP
+        http.begin("http://worldtimeapi.org/api/timezone/America/Los_Angeles"); //HTTP
 
         USE_SERIAL.print("[HTTP] GET...\n");
-        Serial.println("test")
         // start connection and send HTTP header
         int httpCode = http.GET();
+        
 
         // httpCode will be negative on error
         if(httpCode > 0) {
@@ -90,6 +92,32 @@ void loop() {
         }
 
         http.end();
+
+        // now, make the POST request
+        HTTPClient postHTTP;
+
+        USE_SERIAL.print("[HTTP] POST begin...\n");
+        // configure traged server and url
+        postHTTP.begin("https://httpbin.org/post"); //HTTP
+
+        String body = "{\"message\": \"hello world!\"";
+
+        int postCode = postHTTP.POST(body);
+        if (postCode > 0) {
+          // HTTP header has been send and Server response header has been handled
+          USE_SERIAL.printf("[HTTP] POST... code: %d\n", postCode);
+
+          // file found at server
+          if(postCode == HTTP_CODE_OK) {
+              String payload = postHTTP.getString();
+              USE_SERIAL.println(payload);
+          } 
+          
+        } else {
+            USE_SERIAL.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpCode).c_str());
+        }
+
+        postHTTP.end();
     }
 
     delay(5000);
