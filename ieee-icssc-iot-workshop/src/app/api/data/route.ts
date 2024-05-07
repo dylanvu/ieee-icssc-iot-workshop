@@ -4,7 +4,7 @@ import { ServiceAccount } from "firebase-admin";
 import { getFirestore } from "firebase-admin/firestore";
 
 // initialize firebase
-    const serviceAccountString = process.env.FIREBASE_SERVICE_ACCOUNT;
+const serviceAccountString = process.env.FIREBASE_SERVICE_ACCOUNT;
 
 if (!serviceAccountString || serviceAccountString.length === 0) {
     throw Error("Error: Firebase service account not found.");
