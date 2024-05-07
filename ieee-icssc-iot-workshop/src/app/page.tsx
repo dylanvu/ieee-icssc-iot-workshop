@@ -69,7 +69,11 @@ export default function Home() {
                             messages.map((message, index) => {
                                 return (
                                     <div key={`message-${index}`}>
-                                        <span>[{message.timestamp}]&nbsp;</span>
+                                        <span>
+                                            [
+                                            {formatTimestamp(message.timestamp)}
+                                            ]&nbsp;
+                                        </span>
                                         <span
                                             style={{
                                                 color: stringToColour(
@@ -124,4 +128,16 @@ function stringToColour(str: string): string {
         colour += value.toString(16).padStart(2, '0')
     }
     return colour
+}
+
+function formatTimestamp(timestamp: string): string {
+    const date = new Date(timestamp)
+    const hours = date.getHours()
+    const ampm = hours >= 12 ? 'PM' : 'AM'
+    const formattedHours = (hours % 12 || 12).toString().padStart(2, '0')
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    const seconds = date.getSeconds().toString().padStart(2, '0')
+
+    const formattedTime = `${formattedHours}:${minutes}:${seconds} ${ampm}`
+    return formattedTime
 }
