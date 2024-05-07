@@ -2,11 +2,14 @@
 import { ChatMessage } from "@/interfaces/chat";
 import { useEffect, useState, useRef, RefObject } from "react";
 import { CircularProgress, CircularProgressLabel, Grid, GridItem } from "@chakra-ui/react";
+import firebase from "@/components/firebase"
+import { getDatabase } from "firebase/database";
 
 export default function Home() {
   const startingCountdown = 5;
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [currentTime, setCurrentTime] = useState<number>(startingCountdown);
+  const [realtimeDB, setRealtimeDB] = useState<any>()
 
   // create dummy data
   const dummyMessage: ChatMessage = {
@@ -22,6 +25,7 @@ export default function Home() {
   }
 
   useEffect(() => {
+    setRealtimeDB(getDatabase(firebase))
     setMessages(initial);
   }, []);
 
