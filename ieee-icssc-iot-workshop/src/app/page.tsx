@@ -58,18 +58,29 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center p-12">
-      <h1>ICSSC x IEEE ESP32 Chat</h1>
-      <CircularProgress
-        value={
-          currentTime ? (currentTime / startingCountdown) * 100 : 0.0000000001
-        }
-        color="pink.400"
-        // #fcaec2
-        size="120px"
-      >
-        <CircularProgressLabel>{currentTime}s</CircularProgressLabel>
-      </CircularProgress>
-      <div>Refresh Timer</div>
+      <Grid templateColumns="4fr 1fr" gap={6} width={"80vw"}>
+        <GridItem
+          colSpan={1}
+          className="flex items-center justify-center"
+        >
+          <h1>ICSSC x IEEE ESP32 Chat</h1>
+        </GridItem>
+        <GridItem colSpan={1} className="m-auto">
+          <CircularProgress
+            value={
+              currentTime
+                ? (currentTime / startingCountdown) * 100
+                : 0.0000000001
+            }
+            color="pink.400"
+            // #fcaec2
+            size="120px"
+          >
+            <CircularProgressLabel>{currentTime}s</CircularProgressLabel>
+          </CircularProgress>
+          <div>Refresh Timer</div>
+        </GridItem>
+      </Grid>
       <Grid templateColumns="4fr 1fr" gap={6} width={"80vw"}>
         <GridItem colSpan={1}>
           <h2>Chat</h2>
@@ -78,7 +89,14 @@ export default function Home() {
               return (
                 <div key={`message-${index}`}>
                   <span>[{message.timestamp}]&nbsp;</span>
-                  <span>{message.author}:&nbsp;</span>
+                  <span
+                    style={{
+                      color: stringToColour(message.author),
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {message.author}:&nbsp;
+                  </span>
                   <span>
                     {message.message} - {index}
                   </span>
@@ -94,10 +112,23 @@ export default function Home() {
             {uniqueAuthors.map((author, index) => {
               return <div key={`author-${index}`}>{author}</div>;
             })}
-            <div ref={chattersEndRef}/>
+            <div ref={chattersEndRef} />
           </div>
         </GridItem>
       </Grid>
     </main>
   );
 }
+
+function stringToColour(str: string): string {
+  let hash = 0;
+  str.split("").forEach((char) => {
+    hash = char.charCodeAt(0) + ((hash << 5) - hash);
+  });
+  let colour = "#";
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff;
+    colour += value.toString(16).padStart(2, "0");
+  }
+  return colour;
+};

@@ -37,8 +37,8 @@ h2 {
 }
 
 .chatbox-container {
-  max-height: 60vh;
-  min-height: 60vh;
+  max-height: 68vh;
+  min-height: 68vh;
   overflow-y: auto;
   padding-top: 2%;
   padding-bottom: 2%;
