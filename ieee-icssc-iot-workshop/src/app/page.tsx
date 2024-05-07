@@ -86,7 +86,13 @@ export default function Home() {
             <Grid templateColumns="4fr 1fr" gap={6} width={'80vw'}>
                 <GridItem colSpan={1}>
                     <h2>Chat</h2>
-                    <div className="chatbox-container flex items-center justify-center">
+                    <div
+                        className={`chatbox-container ${
+                            !messages || !messages.length
+                                ? 'flex items-center justify-center'
+                                : ''
+                        }`}
+                    >
                         {messages && messages.length ? (
                             messages.map((message, index) => {
                                 return (
