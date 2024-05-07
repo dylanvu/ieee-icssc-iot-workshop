@@ -6,21 +6,7 @@ import firebase from '@/components/firebase'
 import { getDatabase, ref, onChildAdded, get, off } from 'firebase/database'
 
 export default function Home() {
-    const startingCountdown = 5
     const [messages, setMessages] = useState<ChatMessage[]>([])
-    const [currentTime, setCurrentTime] = useState<number>(startingCountdown)
-
-    // create dummy data
-    const dummyMessage: ChatMessage = {
-        author: 'Alice',
-        message: 'Hello, World!',
-        timestamp: new Date('5/6/2024, 5:36:57 PM').toLocaleTimeString(),
-    }
-
-    const initial: ChatMessage[] = []
-    for (let i = 0; i < 100; i++) {
-        initial.push(dummyMessage)
-    }
 
     useEffect(() => {
         const db = getDatabase(firebase)
@@ -46,20 +32,6 @@ export default function Home() {
             off(messagesRef)
         }
     }, [])
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (currentTime === 0) {
-                console.log('Countdown finished!')
-                clearInterval(interval)
-                setCurrentTime(startingCountdown)
-            } else {
-                setCurrentTime(currentTime - 1)
-            }
-        }, 1000)
-
-        return () => clearInterval(interval)
-    }, [currentTime])
 
     const scrollToBottom = (ref: RefObject<HTMLDivElement>) => {
         console.log('scrolling to bottom')
