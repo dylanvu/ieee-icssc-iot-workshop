@@ -100,7 +100,10 @@ void loop() {
         // configure traged server and url
         postHTTP.begin("https://httpbin.org/post"); //HTTP
 
-        String body = "{\"message\": \"hello world!\"";
+        // build the POST request body
+        // required: author and message field, non-empty
+        // if either is missing, the POST request will fail
+        String body = "{\"author\": \"Dylan Vu \", \"message\": \"hello world!\"}";
 
         int postCode = postHTTP.POST(body);
         if (postCode > 0) {
@@ -120,5 +123,6 @@ void loop() {
         postHTTP.end();
     }
 
+    // request only once every 5 seconds to avoid data rates
     delay(5000);
 }
