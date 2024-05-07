@@ -1,6 +1,6 @@
 'use client';
 import { ChatMessage } from "@/interfaces/chat";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, RefObject } from "react";
 import { CircularProgress, CircularProgressLabel, Grid, GridItem } from "@chakra-ui/react";
 
 export default function Home() {
@@ -9,19 +9,20 @@ export default function Home() {
   const [currentTime, setCurrentTime] = useState<number>(startingCountdown);
 
   // create dummy data
-  const dummyMessage = {
+  const dummyMessage: ChatMessage = {
     author: "Alice",
     message: "Hello, World!",
     timestamp: new Date("5/6/2024, 5:36:57 PM").toLocaleTimeString(),
   };
 
+  const initial: ChatMessage[] = [];
+  for (let i = 0; i < 100; i++) {
+    initial.push(dummyMessage);
+  
+  }
+
   useEffect(() => {
-    setMessages([
-      dummyMessage,
-      dummyMessage,
-      dummyMessage,
-      dummyMessage
-    ]);
+    setMessages(initial);
   }, []);
 
   useEffect(() => {
@@ -40,12 +41,28 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [currentTime]);
 
+  const scrollToBottom = (ref: RefObject<HTMLDivElement>) => {
+    console.log("scrolling to bottom");
+    ref.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom(messagesEndRef);
+    scrollToBottom(chattersEndRef);
+  }, [messages])
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chattersEndRef = useRef<HTMLDivElement>(null);
+
   const uniqueAuthors = messages.map((message) => message.author).filter((value, index, self) => self.indexOf(value) === index);
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
+    <main className="flex min-h-screen flex-col items-center p-12">
+      <h1>ICSSC x IEEE ESP32 Chat</h1>
       <CircularProgress
-        value={currentTime ? (currentTime / startingCountdown) * 100 : 0.0000000001}
+        value={
+          currentTime ? (currentTime / startingCountdown) * 100 : 0.0000000001
+        }
         color="pink.400"
         // #fcaec2
         size="120px"
@@ -53,24 +70,33 @@ export default function Home() {
         <CircularProgressLabel>{currentTime}s</CircularProgressLabel>
       </CircularProgress>
       <div>Refresh Timer</div>
-      <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+      <Grid templateColumns="4fr 1fr" gap={6} width={"80vw"}>
         <GridItem colSpan={1}>
-          <h1>Chat</h1>
-          {messages.map((message, index) => {
-            return (
-              <div key={`message-${index}`}>
-                <span>[{message.timestamp}]&nbsp;</span>
-                <span>{message.author}:&nbsp;</span>
-                <span>{message.message}</span>
-              </div>
-            );
-          })}
+          <h2>Chat</h2>
+          <div className="chatbox-container">
+            {messages.map((message, index) => {
+              return (
+                <div key={`message-${index}`}>
+                  <span>[{message.timestamp}]&nbsp;</span>
+                  <span>{message.author}:&nbsp;</span>
+                  <span>
+                    {message.message} - {index}
+                  </span>
+                </div>
+              );
+            })}
+            <div ref={messagesEndRef} />
+          </div>
         </GridItem>
         <GridItem colSpan={1}>
-          <h1>Chatters</h1>
-          {uniqueAuthors.map((author, index) => {
-          return <div key={`author-${index}`}>{author}</div>
-        })}</GridItem>
+          <h2>Chatters</h2>
+          <div className="chatbox-container">
+            {uniqueAuthors.map((author, index) => {
+              return <div key={`author-${index}`}>{author}</div>;
+            })}
+            <div ref={chattersEndRef}/>
+          </div>
+        </GridItem>
       </Grid>
     </main>
   );

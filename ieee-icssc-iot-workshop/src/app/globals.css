@@ -23,3 +23,27 @@ body {
     text-wrap: balance;
   }
 }
+
+h1 {
+  margin: auto;
+  text-align: center;
+  font-size: 3rem;
+}
+
+h2 {
+  margin: auto;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.chatbox-container {
+  max-height: 60vh;
+  min-height: 60vh;
+  overflow-y: auto;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  padding-left: 4%;
+  padding-right: 4%;
+  border: 2px solid rgb(var(--foreground-rgb));
+  border-radius: 5px;
+}
