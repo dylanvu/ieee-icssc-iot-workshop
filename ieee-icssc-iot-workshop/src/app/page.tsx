@@ -105,7 +105,7 @@ export default function Home() {
                                 )
                             })
                         ) : (
-                            <div className="progress-container">
+                            <div className="w-4/5">
                                 <h3 className="progress-label">
                                     Waiting for messages...
                                 </h3>
