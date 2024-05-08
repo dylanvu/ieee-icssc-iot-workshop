@@ -1,12 +1,14 @@
 'use client'
 import { ChatMessage } from '@/interfaces/chat'
 import { useEffect, useState, useRef, RefObject } from 'react'
-import { Grid, GridItem, Progress } from '@chakra-ui/react'
+import { Grid, GridItem, Progress, IconButton } from '@chakra-ui/react'
 import firebase from '@/components/firebase'
 import { getDatabase, ref, onChildAdded, get, off } from 'firebase/database'
+import { AddIcon, MinusIcon } from '@chakra-ui/icons'
 
 export default function Home() {
     const [messages, setMessages] = useState<ChatMessage[]>([])
+    const [fontSize, setFontSize] = useState<number>(1.2)
 
     useEffect(() => {
         const db = getDatabase(firebase)
@@ -69,22 +71,36 @@ export default function Home() {
                             messages.map((message, index) => {
                                 return (
                                     <div key={`message-${index}`}>
-                                        <span>
+                                        <span
+                                            className="font-dynamic"
+                                            style={{
+                                                fontSize: `${fontSize}rem`,
+                                            }}
+                                        >
                                             [
                                             {formatTimestamp(message.timestamp)}
                                             ]&nbsp;
                                         </span>
                                         <span
+                                            className="font-dynamic"
                                             style={{
                                                 color: stringToColour(
                                                     message.author
                                                 ),
                                                 fontWeight: 'bold',
+                                                fontSize: `${fontSize}rem`,
                                             }}
                                         >
                                             {message.author}:&nbsp;
                                         </span>
-                                        <span>{message.message}</span>
+                                        <span
+                                            className="font-dynamic"
+                                            style={{
+                                                fontSize: `${fontSize}rem`,
+                                            }}
+                                        >
+                                            {message.message}
+                                        </span>
                                     </div>
                                 )
                             })
@@ -107,10 +123,48 @@ export default function Home() {
                     <h2>Chatters</h2>
                     <div className="chatbox-container">
                         {uniqueAuthors.map((author, index) => {
-                            return <div key={`author-${index}`}>{author}</div>
+                            return (
+                                <div
+                                    key={`author-${index}`}
+                                    className="font-dynamic"
+                                    style={{
+                                        fontSize: `${fontSize}rem`,
+                                    }}
+                                >
+                                    {author}
+                                </div>
+                            )
                         })}
                         <div ref={chattersEndRef} />
                     </div>
+                </GridItem>
+            </Grid>
+            <Grid
+                templateColumns="1fr 1fr 1fr"
+                justifyContent={'center'}
+                justifyItems={'center'}
+            >
+                <GridItem
+                    colSpan={1}
+                    className="flex items-center justify-center text-center px-4"
+                >
+                    Adjust Font Size:
+                </GridItem>
+                <GridItem colSpan={1}>
+                    <IconButton
+                        aria-label="Increase Font"
+                        colorScheme="pink"
+                        icon={<AddIcon />}
+                        onClick={(e) => setFontSize(fontSize + 0.1)}
+                    />
+                </GridItem>
+                <GridItem colSpan={1}>
+                    <IconButton
+                        aria-label="Reduce Font"
+                        colorScheme="pink"
+                        icon={<MinusIcon />}
+                        onClick={(e) => setFontSize(fontSize - 0.1)}
+                    />
                 </GridItem>
             </Grid>
         </main>
