@@ -24,7 +24,7 @@ export default function Home() {
         // when a new message comes in, update the messages state
         onChildAdded(messagesRef, (snapshot) => {
             const message = snapshot.val()
-            setMessages([...messages, message])
+            setMessages((prevMessages) => [...prevMessages, message])
         })
 
         // clean up listener when app unmounts
