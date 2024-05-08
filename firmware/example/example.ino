@@ -1,4 +1,4 @@
-// make sure to select the Lolin C3 Mini board
+// make sure to select the ESP32C3 Dev Module board
 #include <Arduino.h>
 
 #include <WiFi.h>
