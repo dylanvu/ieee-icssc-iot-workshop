@@ -39,6 +39,7 @@ h2 {
 .chatbox-container {
     max-height: 68vh;
     min-height: 68vh;
+    max-width: 80vw;
     overflow-y: auto;
     padding-top: 2%;
     padding-bottom: 2%;
